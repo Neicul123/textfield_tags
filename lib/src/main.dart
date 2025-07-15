@@ -16,17 +16,17 @@ class TextFieldTags extends StatefulWidget {
   final void Function(String tag) onDelete;
 
   ///[initialTags] are optional initial tags you can enter
-  final List<String> initialTags;
+  final List<String>? initialTags;
   
   ///[allowSpaces] can be set to true to prevent tags from being added when entering space. Defaults to false.
   final bool allowSpaces;
 
   const TextFieldTags({
-    Key key,
-    @required this.tagsStyler,
-    @required this.textFieldStyler,
-    @required this.onTag,
-    @required this.onDelete,
+    Key? key,
+    required this.tagsStyler,
+    required this.textFieldStyler,
+    required this.onTag,
+    required this.onDelete,
     this.initialTags,
     this.allowSpaces = false,
   })  : assert(tagsStyler != null && textFieldStyler != null,
@@ -39,15 +39,15 @@ class TextFieldTags extends StatefulWidget {
 }
 
 class _TextFieldTagsState extends State<TextFieldTags> {
-  List<String> _tagsStringContent = [];
+  List<String>? _tagsStringContent = [];
   TextEditingController _textEditingController = TextEditingController();
   ScrollController _scrollController = ScrollController();
   bool _showPrefixIcon = false;
-  double _deviceWidth;
+  late double _deviceWidth;
   @override
   void initState() {
     super.initState();
-    if (widget.initialTags != null && widget.initialTags.isNotEmpty) {
+    if (widget.initialTags != null && widget.initialTags!.isNotEmpty) {
       _showPrefixIcon = true;
       _tagsStringContent = widget.initialTags;
     }
@@ -68,8 +68,8 @@ class _TextFieldTagsState extends State<TextFieldTags> {
 
   List<Widget> get _getTags {
     List<Widget> _tags = [];
-    for (var i = 0; i < _tagsStringContent.length; i++) {
-      String tagText = widget.tagsStyler.showHashtag ?  "#${_tagsStringContent[i]}" : _tagsStringContent[i];
+    for (var i = 0; i < _tagsStringContent!.length; i++) {
+      String tagText = widget.tagsStyler.showHashtag ?  "#${_tagsStringContent![i]}" : _tagsStringContent![i];
       var tag = Container(
         padding: widget.tagsStyler.tagPadding,
         decoration: widget.tagsStyler.tagDecoration,
@@ -89,16 +89,16 @@ class _TextFieldTagsState extends State<TextFieldTags> {
               child: GestureDetector(
                 onTap: () {
                   if (widget.onDelete != null)
-                    widget.onDelete(_tagsStringContent[i]);
+                    widget.onDelete(_tagsStringContent![i]);
 
-                  if (_tagsStringContent.length == 1 && _showPrefixIcon) {
+                  if (_tagsStringContent!.length == 1 && _showPrefixIcon) {
                     setState(() {
-                      _tagsStringContent.remove(_tagsStringContent[i]);
+                      _tagsStringContent!.remove(_tagsStringContent![i]);
                       _showPrefixIcon = false;
                     });
                   } else {
                     setState(() {
-                      _tagsStringContent.remove(_tagsStringContent[i]);
+                      _tagsStringContent!.remove(_tagsStringContent![i]);
                     });
                   }
                 },
@@ -165,16 +165,16 @@ class _TextFieldTagsState extends State<TextFieldTags> {
         var val = value.trim().toLowerCase();
         if (value.length > 0) {
           _textEditingController.clear();
-          if (!_tagsStringContent.contains(val)) {
+          if (!_tagsStringContent!.contains(val)) {
             widget.onTag(val);
             if (!_showPrefixIcon) {
               setState(() {
-                _tagsStringContent.add(val);
+                _tagsStringContent!.add(val);
                 _showPrefixIcon = true;
               });
             } else {
               setState(() {
-                _tagsStringContent.add(val);
+                _tagsStringContent!.add(val);
               });
             }
             this._animateTransition();
@@ -191,17 +191,17 @@ class _TextFieldTagsState extends State<TextFieldTags> {
             if (lastLastTag.length > 0) {
               _textEditingController.clear();
 
-              if (!_tagsStringContent.contains(lastLastTag)) {
+              if (!_tagsStringContent!.contains(lastLastTag)) {
                 widget.onTag(lastLastTag);
 
                 if (!_showPrefixIcon) {
                   setState(() {
-                    _tagsStringContent.add(lastLastTag);
+                    _tagsStringContent!.add(lastLastTag);
                     _showPrefixIcon = true;
                   });
                 } else {
                   setState(() {
-                    _tagsStringContent.add(lastLastTag);
+                    _tagsStringContent!.add(lastLastTag);
                   });
                 }
                 this._animateTransition();
